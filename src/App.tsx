@@ -12,6 +12,7 @@ import { DeliveryList } from './components/DeliveryList';
 import { PaymentList } from './components/PaymentList';
 import { DeliveryForm } from './components/DeliveryForm';
 import { PaymentPage } from './components/PaymentPage';
+import { DriversPage } from './components/DriversPage';
 import { mockDeliveries, mockPayments } from './mockData';
 
 export default function App() {
@@ -85,6 +86,10 @@ export default function App() {
 
               {activeTab === 'payments' && (
                 <PaymentPage />
+              )}
+
+              {activeTab === 'fleet' && (
+                <DriversPage />
               )}
 
               {/* Placeholder for other tabs */}
