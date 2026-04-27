@@ -1,5 +1,5 @@
 {
-  "name": "Force Control",
+  "name": "SAAS Force",
   "description": "Logistics operations and fleet management SaaS for Venezuelan companies with integrated payment logging and real-time tracking.",
   "requestFramePermissions": [
     "geolocation"

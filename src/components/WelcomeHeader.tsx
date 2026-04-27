@@ -8,7 +8,7 @@ interface WelcomeHeaderProps {
 
 export function WelcomeHeader({ onNewDelivery }: WelcomeHeaderProps) {
   return (
-    <div className="flex items-center justify-between">
+    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
       <div>
         <h1 className="text-2xl font-semibold text-slate-900 tracking-tight">Resumen de Operaciones</h1>
         <p className="text-slate-500 text-xs mt-1">Estado en tiempo real de la red logística regional</p>
