@@ -1,0 +1,13 @@
+{
+  "name": "Force Control",
+  "description": "Logistics operations and fleet management SaaS for Venezuelan companies with integrated payment logging and real-time tracking.",
+  "requestFramePermissions": [
+    "geolocation"
+  ],
+  "majorCapabilities": [
+    "Real-time Tracking",
+    "Multi-tenant Architecture",
+    "Integrated Payments (Zelle, Pago Móvil)",
+    "Fleet Management"
+  ]
+}
