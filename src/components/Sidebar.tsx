@@ -1,5 +1,5 @@
 import React from 'react';
-import { Package, Truck, CreditCard, Users, Settings, LogOut, LayoutDashboard, Map } from 'lucide-react';
+import { Package, Truck, CreditCard, Users, Settings, LogOut, LayoutDashboard, Map, Trophy } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { motion, AnimatePresence } from 'motion/react';
@@ -16,6 +16,7 @@ export function Sidebar({ activeTab, setActiveTab, isOpen, onClose }: SidebarPro
   const menuItems = [
     { id: 'dashboard', label: 'Resumen General', icon: LayoutDashboard },
     { id: 'fleet', label: 'Gestión de Flota', icon: Truck },
+    { id: 'performance', label: 'Ranking Operativo', icon: Trophy },
     { id: 'deliveries', label: 'Entregas Activas', icon: Package },
     { id: 'payments', label: 'Pagos y Liquidación', icon: CreditCard },
     { id: 'users', label: 'Configuración', icon: Settings },

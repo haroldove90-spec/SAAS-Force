@@ -15,6 +15,8 @@ import { PaymentList } from './components/PaymentList';
 import { PaymentPage } from './components/PaymentPage';
 import { DriversPage } from './components/DriversPage';
 import { SettingsPage } from './components/SettingsPage';
+import { DashboardMain } from './components/DashboardMain';
+import { DriverPerformancePage } from './components/DriverPerformancePage';
 import { mockDeliveries, mockPayments } from './mockData';
 
 export default function App() {
@@ -75,16 +77,7 @@ export default function App() {
                   className="space-y-6"
                 >
                   <WelcomeHeader onNewDelivery={() => setActiveTab('deliveries')} />
-                  <StatsCards />
-                  
-                  <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                    <div className="lg:col-span-2">
-                       <DeliveryList />
-                    </div>
-                    <div>
-                       <PaymentList payments={mockPayments} />
-                    </div>
-                  </div>
+                  <DashboardMain />
                 </motion.div>
               )}
 
@@ -105,6 +98,10 @@ export default function App() {
 
               {activeTab === 'fleet' && (
                 <DriversPage />
+              )}
+
+              {activeTab === 'performance' && (
+                <DriverPerformancePage />
               )}
 
               {activeTab === 'users' && (
