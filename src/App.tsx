@@ -11,12 +11,19 @@ import { StatsCards } from './components/StatsCards';
 import { DeliveryList } from './components/DeliveryList';
 import { PaymentList } from './components/PaymentList';
 import { DeliveryForm } from './components/DeliveryForm';
+import { PaymentPage } from './components/PaymentPage';
 import { mockDeliveries, mockPayments } from './mockData';
 
 export default function App() {
   const [activeTab, setActiveTab] = useState('dashboard');
   const [showNewDelivery, setShowNewDelivery] = useState(false);
 
+  const stats = [
+    { label: 'En Tránsito', value: '128', change: '↑ 12% vs ayer', trend: 'text-green-600' },
+    { label: 'Volumen Diario', value: '$4,290.00', change: 'Liquidado en USD', trend: 'text-slate-400' },
+    { label: 'Bolívares (VES)', value: 'Bs. 156.40K', change: 'Pago Móvil y Efectivo', trend: 'text-slate-400' },
+    { label: 'Choferes Activos', value: '42 / 50', change: 'Utilización de Flota: 84%', trend: 'text-slate-400' },
+  ];
   return (
     <div className="flex h-screen w-full bg-background overflow-hidden">
       <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} />
@@ -77,14 +84,7 @@ export default function App() {
               )}
 
               {activeTab === 'payments' && (
-                <motion.div
-                  key="payments"
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -10 }}
-                >
-                  <PaymentList payments={mockPayments} fullWidth />
-                </motion.div>
+                <PaymentPage />
               )}
 
               {/* Placeholder for other tabs */}

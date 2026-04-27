@@ -29,17 +29,17 @@ export function DeliveryList({ deliveries, fullWidth }: DeliveryListProps) {
   return (
     <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
       <div className="p-4 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
-        <h2 className="font-bold text-slate-700 text-sm">Recent Deliveries</h2>
-        <span className="text-[10px] text-slate-400 uppercase font-medium">Auto-updating: Live</span>
+        <h2 className="font-bold text-slate-700 text-sm">Entregas Recientes</h2>
+        <span className="text-[10px] text-slate-400 uppercase font-medium">Actualización en Vivo</span>
       </div>
       <div className="overflow-x-auto">
         <Table>
           <TableHeader className="bg-white">
             <TableRow className="hover:bg-transparent border-slate-100">
-              <TableHead className="px-4 py-3 font-bold text-slate-400 text-[10px] uppercase tracking-wider h-auto">Tracking</TableHead>
-              <TableHead className="px-4 py-3 font-bold text-slate-400 text-[10px] uppercase tracking-wider h-auto">Route</TableHead>
-              <TableHead className="px-4 py-3 font-bold text-slate-400 text-[10px] uppercase tracking-wider h-auto">Driver</TableHead>
-              <TableHead className="px-4 py-3 font-bold text-slate-400 text-[10px] uppercase tracking-wider h-auto">Status</TableHead>
+              <TableHead className="px-4 py-3 font-bold text-slate-400 text-[10px] uppercase tracking-wider h-auto">Guía / Tracking</TableHead>
+              <TableHead className="px-4 py-3 font-bold text-slate-400 text-[10px] uppercase tracking-wider h-auto">Ruta</TableHead>
+              <TableHead className="px-4 py-3 font-bold text-slate-400 text-[10px] uppercase tracking-wider h-auto">Chofer</TableHead>
+              <TableHead className="px-4 py-3 font-bold text-slate-400 text-[10px] uppercase tracking-wider h-auto">Estado</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody className="text-slate-600">
@@ -52,11 +52,13 @@ export function DeliveryList({ deliveries, fullWidth }: DeliveryListProps) {
                   {delivery.origen.split(',')[0]} → {delivery.destino_coords.address.split(',')[0]}
                 </td>
                 <td className="px-4 py-3 text-xs">
-                  {delivery.driver_id ? 'Carlos Pérez' : 'Unassigned'}
+                  {delivery.driver_id ? 'Juan Pérez' : 'Sin Asignar'}
                 </td>
                 <td className="px-4 py-3">
                   <Badge className={`px-2 py-0.5 rounded-full text-[10px] font-bold uppercase ${getStatusColor(delivery.status)} shadow-none`}>
-                    {delivery.status.replace('_', ' ')}
+                    {delivery.status === 'in_transit' ? 'En Tránsito' : 
+                     delivery.status === 'pending' ? 'Pendiente' : 
+                     delivery.status === 'delivered' ? 'Entregado' : 'Cancelado'}
                   </Badge>
                 </td>
               </TableRow>

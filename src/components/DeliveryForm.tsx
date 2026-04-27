@@ -23,26 +23,26 @@ export function DeliveryForm({ open, onOpenChange }: DeliveryFormProps) {
       <DialogContent className="sm:max-w-[500px]">
         <DialogHeader>
           <DialogTitle className="font-mono uppercase tracking-tight">Registrar Nuevo Envío</DialogTitle>
-          <DialogDescription className="text-xs">
-            Complete los datos detallados del origen y destino para generar el número de tracking.
+          <DialogDescription className="text-xs text-slate-500">
+            Complete los datos detallados del origen y destino para generar el número de guía.
           </DialogDescription>
         </DialogHeader>
         <div className="grid gap-6 py-4">
           <div className="grid gap-2">
-            <Label htmlFor="origen" className="text-xs font-mono uppercase tracking-wider text-muted-foreground">Origen (Planta/Galpón)</Label>
-            <Input id="origen" placeholder="Ej: Galpón Valencia Central" />
+            <Label htmlFor="origen" className="text-xs font-bold uppercase tracking-wider text-slate-400">Origen (Planta/Galpón)</Label>
+            <Input id="origen" placeholder="Ej: Galpón Valencia Central" className="rounded-md" />
           </div>
           
           <div className="grid gap-2">
-            <Label htmlFor="destino" className="text-xs font-mono uppercase tracking-wider text-muted-foreground">Dirección de Destino</Label>
-            <Input id="destino" placeholder="Ej: Urb. Altamira, Edif Residencia 1" />
+            <Label htmlFor="destino" className="text-xs font-bold uppercase tracking-wider text-slate-400">Dirección de Destino</Label>
+            <Input id="destino" placeholder="Ej: Urb. Altamira, Edif Residencia 1" className="rounded-md" />
           </div>
 
           <div className="grid grid-cols-2 gap-4">
             <div className="grid gap-2">
-              <Label htmlFor="driver" className="text-xs font-mono uppercase tracking-wider text-muted-foreground">Asignar Chofer</Label>
+              <Label htmlFor="driver" className="text-xs font-bold uppercase tracking-wider text-slate-400">Asignar Chofer</Label>
               <Select>
-                <SelectTrigger id="driver">
+                <SelectTrigger id="driver" className="rounded-md">
                   <SelectValue placeholder="Seleccionar..." />
                 </SelectTrigger>
                 <SelectContent>
@@ -52,9 +52,9 @@ export function DeliveryForm({ open, onOpenChange }: DeliveryFormProps) {
               </Select>
             </div>
             <div className="grid gap-2">
-              <Label htmlFor="type" className="text-xs font-mono uppercase tracking-wider text-muted-foreground">Tipo de Carga</Label>
+              <Label htmlFor="type" className="text-xs font-bold uppercase tracking-wider text-slate-400">Tipo de Carga</Label>
               <Select>
-                <SelectTrigger id="type">
+                <SelectTrigger id="type" className="rounded-md">
                   <SelectValue placeholder="Seleccionar..." />
                 </SelectTrigger>
                 <SelectContent>
@@ -67,8 +67,8 @@ export function DeliveryForm({ open, onOpenChange }: DeliveryFormProps) {
           </div>
         </div>
         <DialogFooter className="gap-2">
-          <Button variant="outline" onClick={() => onOpenChange(false)}>Cancelar</Button>
-          <Button type="submit" className="px-8" onClick={() => onOpenChange(false)}>Generar Tracking</Button>
+          <Button variant="outline" onClick={() => onOpenChange(false)} className="rounded-md">Cancelar</Button>
+          <Button type="submit" className="bg-slate-900 text-white rounded-md px-8 font-bold text-xs uppercase" onClick={() => onOpenChange(false)}>Generar Guía</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

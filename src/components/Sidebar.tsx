@@ -10,11 +10,11 @@ interface SidebarProps {
 
 export function Sidebar({ activeTab, setActiveTab }: SidebarProps) {
   const menuItems = [
-    { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
-    { id: 'fleet', label: 'Fleet Manager', icon: Truck },
-    { id: 'deliveries', label: 'Active Deliveries', icon: Package },
-    { id: 'payments', label: 'Payment Logs', icon: CreditCard },
-    { id: 'users', label: 'Company Settings', icon: Settings },
+    { id: 'dashboard', label: 'Resumen General', icon: LayoutDashboard },
+    { id: 'fleet', label: 'Gestión de Flota', icon: Truck },
+    { id: 'deliveries', label: 'Entregas Activas', icon: Package },
+    { id: 'payments', label: 'Pagos y Liquidación', icon: CreditCard },
+    { id: 'users', label: 'Configuración', icon: Settings },
   ];
 
   return (
@@ -23,7 +23,7 @@ export function Sidebar({ activeTab, setActiveTab }: SidebarProps) {
         <div className="w-8 h-8 bg-slate-900 rounded-md flex items-center justify-center">
           <div className="w-4 h-4 border-2 border-white rounded-full"></div>
         </div>
-        <span className="font-bold text-lg tracking-tight">Force Control</span>
+        <span className="font-bold text-lg tracking-tight uppercase">Force Control</span>
       </div>
 
       <nav className="flex-1 p-4 space-y-1">
@@ -48,7 +48,7 @@ export function Sidebar({ activeTab, setActiveTab }: SidebarProps) {
         <div className="flex items-center gap-3">
           <div className="w-8 h-8 rounded-full bg-slate-200 flex items-center justify-center text-[10px] font-bold">CM</div>
           <div>
-            <div className="font-medium text-xs">Admin User</div>
+            <div className="font-medium text-xs">Administrador</div>
             <div className="text-[10px] text-slate-400">Distribuidora Los Andes</div>
           </div>
         </div>

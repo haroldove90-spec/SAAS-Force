@@ -4,10 +4,10 @@ import { Card, CardContent } from '@/components/ui/card';
 
 export function StatsCards() {
   const stats = [
-    { label: 'In Transit', value: '128', change: '↑ 12% vs yesterday', trend: 'text-green-600' },
-    { label: 'Daily Volume', value: '$4,290.00', change: 'Settle in USD', trend: 'text-slate-400' },
-    { label: 'Bolivares (VES)', value: 'Bs. 156.40K', change: 'Pago Móvil & Cash', trend: 'text-slate-400' },
-    { label: 'Active Drivers', value: '42 / 50', change: 'Fleet Utilization: 84%', trend: 'text-slate-400' },
+    { label: 'En Tránsito', value: '128', change: '↑ 12% vs ayer', trend: 'text-green-600' },
+    { label: 'Volumen Diario', value: '$4,290.00', change: 'Liquidado en USD', trend: 'text-slate-400' },
+    { label: 'Bolívares (VES)', value: 'Bs. 156.40K', change: 'Pago Móvil y Efectivo', trend: 'text-slate-400' },
+    { label: 'Choferes Activos', value: '42 / 50', change: 'Utilización de Flota: 84%', trend: 'text-slate-400' },
   ];
 
   return (
