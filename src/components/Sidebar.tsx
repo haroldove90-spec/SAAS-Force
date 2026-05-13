@@ -1,5 +1,5 @@
 import React from 'react';
-import { Package, Truck, CreditCard, Users, Settings, LogOut, LayoutDashboard, Map, Trophy } from 'lucide-react';
+import { Package, Truck, CreditCard, Users, Settings, LogOut, LayoutDashboard, Map, Trophy, Receipt, History } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { motion, AnimatePresence } from 'motion/react';
@@ -13,14 +13,34 @@ interface SidebarProps {
 }
 
 export function Sidebar({ activeTab, setActiveTab, isOpen, onClose }: SidebarProps) {
+  const [activeUser, setActiveUser] = React.useState<any>(null);
+
+  React.useEffect(() => {
+    const current = localStorage.getItem('fc_active_user');
+    if (current) {
+      setActiveUser(JSON.parse(current));
+    } else {
+      // Default fallback
+      const admin = { id: '1', name: 'Admin Principal', email: 'admin@saasforce.com', role: 'ADMIN' };
+      setActiveUser(admin);
+    }
+  }, []);
+
   const menuItems = [
-    { id: 'dashboard', label: 'Resumen General', icon: LayoutDashboard },
-    { id: 'fleet', label: 'Gestión de Flota', icon: Truck },
-    { id: 'performance', label: 'Ranking Operativo', icon: Trophy },
-    { id: 'deliveries', label: 'Entregas Activas', icon: Package },
-    { id: 'payments', label: 'Pagos y Liquidación', icon: CreditCard },
-    { id: 'users', label: 'Configuración', icon: Settings },
+    { id: 'dashboard', label: 'Resumen General', icon: LayoutDashboard, roles: ['ADMIN', 'OPERATOR', 'CASHIER'] },
+    { id: 'fleet', label: 'Gestión de Flota', icon: Truck, roles: ['ADMIN', 'OPERATOR'] },
+    { id: 'performance', label: 'Ranking Operativo', icon: Trophy, roles: ['ADMIN'] },
+    { id: 'expenses', label: 'Gestión de Gastos', icon: Receipt, roles: ['ADMIN'] },
+    { id: 'audit', label: 'Auditoría Operativa', icon: History, roles: ['ADMIN'] },
+    { id: 'deliveries', label: 'Entregas Activas', icon: Package, roles: ['ADMIN', 'OPERATOR', 'DRIVER'] },
+    { id: 'payments', label: 'Pagos y Liquidación', icon: CreditCard, roles: ['ADMIN', 'CASHIER'] },
+    { id: 'user_management', label: 'Usuarios y Roles', icon: Users, roles: ['ADMIN'] },
+    { id: 'users', label: 'Configuración', icon: Settings, roles: ['ADMIN'] },
   ];
+
+  const filteredItems = menuItems.filter(item => 
+    !activeUser || (item.roles && item.roles.includes(activeUser.role))
+  );
 
   return (
     <>
@@ -46,7 +66,7 @@ export function Sidebar({ activeTab, setActiveTab, isOpen, onClose }: SidebarPro
             <div className="w-8 h-8 bg-slate-900 rounded-md flex items-center justify-center">
               <div className="w-4 h-4 border-2 border-white rounded-full"></div>
             </div>
-            <span className="font-bold text-lg tracking-tight uppercase">Force Control</span>
+            <span className="font-bold text-lg tracking-tight uppercase">SAAS FORCE</span>
           </div>
           <button onClick={onClose} className="md:hidden text-slate-400">
             <X className="h-5 w-5" />
@@ -54,7 +74,7 @@ export function Sidebar({ activeTab, setActiveTab, isOpen, onClose }: SidebarPro
         </div>
 
       <nav className="flex-1 p-4 space-y-1">
-        {menuItems.map((item) => (
+        {filteredItems.map((item) => (
           <button
             key={item.id}
             onClick={() => setActiveTab(item.id)}
@@ -73,10 +93,12 @@ export function Sidebar({ activeTab, setActiveTab, isOpen, onClose }: SidebarPro
 
       <div className="p-4 border-t border-slate-100">
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-full bg-slate-200 flex items-center justify-center text-[10px] font-bold">CM</div>
+          <div className="w-8 h-8 rounded-full bg-slate-900 text-white flex items-center justify-center text-[10px] font-bold uppercase">
+            {activeUser?.name?.charAt(0) || 'U'}
+          </div>
           <div>
-            <div className="font-medium text-xs">Administrador</div>
-            <div className="text-[10px] text-slate-400">Distribuidora Los Andes</div>
+            <div className="font-bold text-[11px] text-slate-900 uppercase tracking-tight">{activeUser?.name || 'Usuario'}</div>
+            <div className="text-[9px] text-slate-400 font-bold uppercase tracking-widest">{activeUser?.role || 'Visitante'}</div>
           </div>
         </div>
       </div>

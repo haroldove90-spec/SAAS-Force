@@ -17,11 +17,26 @@ import { DriversPage } from './components/DriversPage';
 import { SettingsPage } from './components/SettingsPage';
 import { DashboardMain } from './components/DashboardMain';
 import { DriverPerformancePage } from './components/DriverPerformancePage';
+import { ExpensesPage } from './components/ExpensesPage';
+import { UserManagementPage } from './components/UserManagementPage';
+import { AuditPage } from './components/AuditPage';
 import { mockDeliveries, mockPayments } from './mockData';
 
 export default function App() {
   const [activeTab, setActiveTab] = useState('dashboard');
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [activeUser, setActiveUser] = useState<any>(null);
+
+  React.useEffect(() => {
+    const current = localStorage.getItem('fc_active_user');
+    if (current) {
+      setActiveUser(JSON.parse(current));
+    } else {
+      const admin = { id: '1', name: 'Admin Principal', email: 'admin@saasforce.com', role: 'ADMIN' };
+      setActiveUser(admin);
+      localStorage.setItem('fc_active_user', JSON.stringify(admin));
+    }
+  }, []);
 
   const handleTabChange = (tab: string) => {
     setActiveTab(tab);
@@ -51,16 +66,16 @@ export default function App() {
 
             <h2 className="text-[10px] md:text-sm font-medium text-slate-500 uppercase tracking-widest flex items-center gap-2">
               <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
-              Operaciones / Venezuela
+              SAAS FORCE / Venezuela
             </h2>
           </div>
           <div className="flex items-center gap-4">
             <div className="text-right hidden sm:block">
-              <p className="text-sm font-bold text-slate-900 tracking-tight leading-none">Carlos Mendoza</p>
-              <p className="text-[10px] text-slate-400 font-medium uppercase mt-1">Socio Administrador</p>
+              <p className="text-sm font-bold text-slate-900 tracking-tight leading-none">{activeUser?.name || 'Administrador'}</p>
+              <p className="text-[10px] text-slate-400 font-medium uppercase mt-1">{activeUser?.role === 'ADMIN' ? 'Socio Administrador' : activeUser?.role}</p>
             </div>
             <div className="h-10 w-10 rounded-full bg-slate-900 border-4 border-slate-50 flex items-center justify-center font-bold text-xs text-white shadow-sm">
-              CM
+              {activeUser?.name?.charAt(0) || 'A'}
             </div>
           </div>
         </header>
@@ -102,6 +117,18 @@ export default function App() {
 
               {activeTab === 'performance' && (
                 <DriverPerformancePage />
+              )}
+
+              {activeTab === 'expenses' && (
+                <ExpensesPage />
+              )}
+
+              {activeTab === 'user_management' && (
+                <UserManagementPage />
+              )}
+
+              {activeTab === 'audit' && (
+                <AuditPage />
               )}
 
               {activeTab === 'users' && (

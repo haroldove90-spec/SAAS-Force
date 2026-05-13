@@ -15,6 +15,7 @@ import { Button } from '@/components/ui/button';
 
 export function DashboardMain() {
   const [data, setData] = useState<any[]>([]);
+  const [activeUser, setActiveUser] = useState<any>(null);
   const [stats, setStats] = useState({
     totalUSD: 0,
     totalVES: 0,
@@ -23,6 +24,9 @@ export function DashboardMain() {
   });
 
   useEffect(() => {
+    const current = localStorage.getItem('fc_active_user');
+    if (current) setActiveUser(JSON.parse(current));
+
     const saved = localStorage.getItem('force_deliveries');
     if (saved) {
       const deliveries = JSON.parse(saved);
@@ -39,6 +43,8 @@ export function DashboardMain() {
       setStats(calculated);
     }
   }, []);
+
+  const isAdmin = activeUser?.role === 'ADMIN';
 
   // Simple Chart Data Calculation
   const paymentsByMethod = data.reduce((acc: any, d: any) => {
@@ -57,29 +63,33 @@ export function DashboardMain() {
     >
       {/* Financial Summary Cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
-          <div className="flex justify-between items-start mb-3">
-             <div className="p-2 bg-green-50 rounded-lg">
-                <TrendingUp className="h-4 w-4 text-green-600" />
-             </div>
-             <Badge className="bg-green-100 text-green-700 text-[9px] font-bold border-0">USD</Badge>
-          </div>
-          <div className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Ventas Totales</div>
-          <div className="text-xl font-bold text-slate-900">${stats.totalUSD.toLocaleString()}</div>
-        </div>
+        {isAdmin && (
+          <>
+            <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+              <div className="flex justify-between items-start mb-3">
+                 <div className="p-2 bg-green-50 rounded-lg">
+                    <TrendingUp className="h-4 w-4 text-green-600" />
+                 </div>
+                 <Badge className="bg-green-100 text-green-700 text-[9px] font-bold border-0">USD</Badge>
+              </div>
+              <div className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Ventas Totales</div>
+              <div className="text-xl font-bold text-slate-900">${stats.totalUSD.toLocaleString()}</div>
+            </div>
 
-        <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
-          <div className="flex justify-between items-start mb-3">
-             <div className="p-2 bg-blue-50 rounded-lg">
-                <CreditCard className="h-4 w-4 text-blue-600" />
-             </div>
-             <Badge className="bg-blue-100 text-blue-700 text-[9px] font-bold border-0">VES</Badge>
-          </div>
-          <div className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Total Bolívares</div>
-          <div className="text-xl font-bold text-slate-900">Bs. {stats.totalVES.toLocaleString()}</div>
-        </div>
+            <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+              <div className="flex justify-between items-start mb-3">
+                 <div className="p-2 bg-blue-50 rounded-lg">
+                    <CreditCard className="h-4 w-4 text-blue-600" />
+                 </div>
+                 <Badge className="bg-blue-100 text-blue-700 text-[9px] font-bold border-0">VES</Badge>
+              </div>
+              <div className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Total Bolívares</div>
+              <div className="text-xl font-bold text-slate-900">Bs. {stats.totalVES.toLocaleString()}</div>
+            </div>
+          </>
+        )}
 
-        <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+        <div className={cn("bg-white p-5 rounded-2xl border border-slate-200 shadow-sm", !isAdmin && "col-span-1")}>
           <div className="flex justify-between items-start mb-3">
              <div className="p-2 bg-emerald-50 rounded-lg">
                 <CheckCircle2 className="h-4 w-4 text-emerald-600" />
@@ -89,7 +99,7 @@ export function DashboardMain() {
           <div className="text-xl font-bold text-emerald-600">{stats.completed}</div>
         </div>
 
-        <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+        <div className={cn("bg-white p-5 rounded-2xl border border-slate-200 shadow-sm", !isAdmin && "col-span-1")}>
           <div className="flex justify-between items-start mb-3">
              <div className="p-2 bg-amber-50 rounded-lg">
                 <Clock className="h-4 w-4 text-amber-600" />
@@ -123,23 +133,16 @@ export function DashboardMain() {
                 </div>
               </div>
             ))}
-            {Object.keys(paymentsByMethod).length === 0 && (
-               <div className="text-center py-10">
-                 <AlertCircle className="h-8 w-8 text-slate-200 mx-auto mb-2" />
-                 <p className="text-[10px] text-slate-400 italic">No hay datos suficientes</p>
-               </div>
-            )}
           </div>
         </div>
 
         {/* Recent Activity List */}
         <div className="lg:col-span-2 bg-white border border-slate-200 rounded-3xl p-6 shadow-sm overflow-hidden">
-        <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center justify-between mb-6">
             <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
               <Truck className="h-4 w-4 text-slate-400" />
               Actividad Reciente
             </h3>
-            <Button variant="ghost" size="sm" className="text-[10px] font-bold uppercase text-slate-400">Ver todo</Button>
           </div>
 
           <div className="space-y-1">
@@ -156,23 +159,25 @@ export function DashboardMain() {
                 </div>
                 <div className="flex items-center gap-4">
                    <div className="text-right">
-                      <div className="text-sm font-bold text-slate-900">
-                        {d.moneda === 'VES' ? 'Bs.' : '$'} {d.monto}
-                      </div>
+                      {isAdmin && (
+                        <div className="text-sm font-bold text-slate-900">
+                          {d.moneda === 'VES' ? 'Bs.' : '$'} {d.monto}
+                        </div>
+                      )}
                       <div className="text-[9px] font-bold uppercase text-slate-400">{d.status}</div>
                    </div>
                    <ArrowRight className="h-4 w-4 text-slate-200" />
                 </div>
               </div>
             ))}
-            {data.length === 0 && (
-              <div className="text-center py-16">
-                 <p className="text-xs text-slate-400 italic">Espere a que se procesen las primeras guías...</p>
-              </div>
-            )}
           </div>
         </div>
       </div>
+      {data.length === 0 && (
+        <div className="text-center py-16">
+            <p className="text-xs text-slate-400 italic">Espere a que se procesen las primeras guías...</p>
+        </div>
+      )}
     </motion.div>
   );
 }
