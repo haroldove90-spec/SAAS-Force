@@ -45,6 +45,7 @@ export function DashboardMain() {
   }, []);
 
   const isAdmin = activeUser?.role === 'ADMIN';
+  const canSeeAmounts = isAdmin || activeUser?.role === 'OPERATOR' || activeUser?.role === 'CASHIER';
 
   // Simple Chart Data Calculation
   const paymentsByMethod = data.reduce((acc: any, d: any) => {
@@ -157,9 +158,9 @@ export function DashboardMain() {
                     <div className="text-[10px] text-slate-400 font-mono tracking-tighter">{d.id} • {d.metodoPago?.toUpperCase()}</div>
                   </div>
                 </div>
-                <div className="flex items-center gap-4">
+                 <div className="flex items-center gap-4">
                    <div className="text-right">
-                      {isAdmin && (
+                      {canSeeAmounts && (
                         <div className="text-sm font-bold text-slate-900">
                           {d.moneda === 'VES' ? 'Bs.' : '$'} {d.monto}
                         </div>

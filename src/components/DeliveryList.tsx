@@ -39,6 +39,7 @@ export function DeliveryList() {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [editingDelivery, setEditingDelivery] = useState<any | null>(null);
+  const [activeUser, setActiveUser] = useState<any>(null);
   
   const [formData, setFormData] = useState({
     cliente: '',
@@ -76,7 +77,22 @@ export function DeliveryList() {
     if (savedDrivers) {
       setDrivers(JSON.parse(savedDrivers));
     }
+
+    const current = localStorage.getItem('fc_active_user');
+    if (current) setActiveUser(JSON.parse(current));
   }, []);
+
+  const isAdmin = activeUser?.role === 'ADMIN';
+  const isOperator = activeUser?.role === 'OPERATOR';
+  const isDriver = activeUser?.role === 'DRIVER';
+  const isCashier = activeUser?.role === 'CASHIER';
+
+  const canCreate = isAdmin || isOperator;
+
+  // Filter deliveries for drivers
+  const filteredDeliveries = isDriver 
+    ? deliveries.filter(d => d.choferId === activeUser?.id)
+    : deliveries;
 
   const openDrawer = (delivery?: any) => {
     if (delivery) {
@@ -141,16 +157,22 @@ export function DeliveryList() {
       {/* Header moved inside for token economy/encapsulation */}
       <div className="flex items-center justify-between mb-2">
         <div>
-          <h1 className="text-2xl font-bold text-slate-900 tracking-tight">Registro de Entregas</h1>
-          <p className="text-slate-500 text-xs">Gestión y control de guías en tiempo real</p>
+          <h1 className="text-2xl font-bold text-slate-900 tracking-tight">
+            {isDriver ? 'Mis Entregas Asignadas' : 'Registro de Entregas'}
+          </h1>
+          <p className="text-slate-500 text-xs">
+            {isDriver ? 'Gestiona tus pedidos y reporta cobros en campo' : 'Gestión y control de guías en tiempo real'}
+          </p>
         </div>
-        <Button 
-          onClick={() => openDrawer()}
-          className="bg-slate-900 text-white font-bold text-[10px] uppercase tracking-wider h-11 px-6 shadow-lg shadow-slate-200"
-        >
-          <Plus className="h-4 w-4 mr-2" />
-          Nueva Entrega
-        </Button>
+        {canCreate && (
+          <Button 
+            onClick={() => openDrawer()}
+            className="bg-slate-900 text-white font-bold text-[10px] uppercase tracking-wider h-11 px-6 shadow-lg shadow-slate-200"
+          >
+            <Plus className="h-4 w-4 mr-2" />
+            Nueva Entrega
+          </Button>
+        )}
       </div>
 
       {/* Main Table */}
@@ -176,7 +198,7 @@ export function DeliveryList() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {deliveries.map((d) => (
+              {filteredDeliveries.map((d) => (
                 <TableRow 
                   key={d.id} 
                   onClick={() => openDrawer(d)}
@@ -279,8 +301,9 @@ export function DeliveryList() {
                     </Label>
                     <Input 
                       required
+                      readOnly={isDriver}
                       placeholder="Ej: Farmatodo Las Mercedes"
-                      className="h-12 rounded-xl focus-visible:ring-slate-900"
+                      className={cn("h-12 rounded-xl focus-visible:ring-slate-900", isDriver && "bg-slate-50")}
                       value={formData.cliente}
                       onChange={e => setFormData({...formData, cliente: e.target.value})}
                     />
@@ -292,40 +315,44 @@ export function DeliveryList() {
                     </Label>
                     <Input 
                       required
+                      readOnly={isDriver}
                       placeholder="Calle, Edificio, Referencia"
-                      className="h-12 rounded-xl focus-visible:ring-slate-900"
+                      className={cn("h-12 rounded-xl focus-visible:ring-slate-900", isDriver && "bg-slate-50")}
                       value={formData.direccion}
                       onChange={e => setFormData({...formData, direccion: e.target.value})}
                     />
                   </div>
 
-                  <div className="space-y-2">
-                    <Label className="text-[10px] font-bold uppercase text-slate-400 flex items-center gap-2">
-                      <Truck className="h-3 w-3" /> Seleccionar Chofer
-                    </Label>
-                    <Select value={formData.choferId} onValueChange={val => setFormData({...formData, choferId: val})}>
-                      <SelectTrigger className="h-12 rounded-xl">
-                        <SelectValue placeholder="Buscar en flota operativa..." />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {drivers.map(dr => (
-                          <SelectItem key={dr.id} value={dr.id}>{dr.nombre} - {dr.vehiculo}</SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
+                  {!isDriver && (
+                    <div className="space-y-2">
+                      <Label className="text-[10px] font-bold uppercase text-slate-400 flex items-center gap-2">
+                        <Truck className="h-3 w-3" /> Seleccionar Chofer
+                      </Label>
+                      <Select value={formData.choferId} onValueChange={val => setFormData({...formData, choferId: val})}>
+                        <SelectTrigger className="h-12 rounded-xl">
+                          <SelectValue placeholder="Buscar en flota operativa..." />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {drivers.map(dr => (
+                            <SelectItem key={dr.id} value={dr.id}>{dr.nombre} - {dr.vehiculo}</SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  )}
 
                   <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-2">
                       <Label className="text-[10px] font-bold uppercase text-slate-400 flex items-center gap-2">
-                        <DollarSign className="h-3 w-3" /> Monto
+                        <DollarSign className="h-3 w-3" /> Monto {isDriver && '(A Recaudar)'}
                       </Label>
                       <Input 
                         required
+                        readOnly={isDriver && editingDelivery?.status === 'delivered'}
                         type="number"
                         step="0.01"
                         placeholder="0.00"
-                        className="h-12 rounded-xl focus-visible:ring-slate-900"
+                        className={cn("h-12 rounded-xl focus-visible:ring-slate-900", isDriver && editingDelivery?.status === 'delivered' && "bg-slate-50")}
                         value={formData.monto}
                         onChange={e => setFormData({...formData, monto: e.target.value})}
                       />
@@ -334,7 +361,7 @@ export function DeliveryList() {
                       <Label className="text-[10px] font-bold uppercase text-slate-400 flex items-center gap-2">
                         Moneda
                       </Label>
-                      <Select value={formData.moneda} onValueChange={val => setFormData({...formData, moneda: val})}>
+                      <Select disabled={isDriver} value={formData.moneda} onValueChange={val => setFormData({...formData, moneda: val})}>
                         <SelectTrigger className="h-12 rounded-xl">
                           <SelectValue />
                         </SelectTrigger>
@@ -362,6 +389,32 @@ export function DeliveryList() {
                       </SelectContent>
                     </Select>
                   </div>
+
+                  {editingDelivery && (
+                    <div className="space-y-2">
+                      <Label className="text-[10px] font-bold uppercase text-slate-400 flex items-center gap-2">
+                        <CheckCircle2 className="h-3 w-3" /> Estatus de Entrega
+                      </Label>
+                      <Select 
+                        value={editingDelivery.status} 
+                        onValueChange={val => {
+                          const updated = deliveries.map(d => d.id === editingDelivery.id ? {...d, status: val, updatedAt: new Date().toISOString()} : d);
+                          setDeliveries(updated);
+                          localStorage.setItem('force_deliveries', JSON.stringify(updated));
+                        }}
+                      >
+                        <SelectTrigger className="h-12 rounded-xl border-slate-900 border-2">
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="pending">Pendiente de Salida</SelectItem>
+                          <SelectItem value="in_transit">En Tránsito</SelectItem>
+                          <SelectItem value="delivered">Entregado Exitosamente</SelectItem>
+                          <SelectItem value="cancelled">Cancelado / Devolución</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  )}
                 </div>
 
                 <div className="pt-8">

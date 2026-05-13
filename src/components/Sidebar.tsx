@@ -10,9 +10,10 @@ interface SidebarProps {
   setActiveTab: (tab: string) => void;
   isOpen: boolean;
   onClose: () => void;
+  onLogout?: () => void;
 }
 
-export function Sidebar({ activeTab, setActiveTab, isOpen, onClose }: SidebarProps) {
+export function Sidebar({ activeTab, setActiveTab, isOpen, onClose, onLogout }: SidebarProps) {
   const [activeUser, setActiveUser] = React.useState<any>(null);
 
   React.useEffect(() => {
@@ -91,15 +92,25 @@ export function Sidebar({ activeTab, setActiveTab, isOpen, onClose }: SidebarPro
         ))}
       </nav>
 
-      <div className="p-4 border-t border-slate-100">
-        <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-full bg-slate-900 text-white flex items-center justify-center text-[10px] font-bold uppercase">
-            {activeUser?.name?.charAt(0) || 'U'}
+      <div className="p-4 border-t border-slate-100 space-y-4">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 rounded-full bg-slate-900 text-white flex items-center justify-center text-[10px] font-bold uppercase">
+              {activeUser?.name?.charAt(0) || 'U'}
+            </div>
+            <div>
+              <div className="font-bold text-[11px] text-slate-900 uppercase tracking-tight">{activeUser?.name || 'Usuario'}</div>
+              <div className="text-[9px] text-slate-400 font-bold uppercase tracking-widest">{activeUser?.role || 'Visitante'}</div>
+            </div>
           </div>
-          <div>
-            <div className="font-bold text-[11px] text-slate-900 uppercase tracking-tight">{activeUser?.name || 'Usuario'}</div>
-            <div className="text-[9px] text-slate-400 font-bold uppercase tracking-widest">{activeUser?.role || 'Visitante'}</div>
-          </div>
+          <Button 
+            variant="ghost" 
+            size="icon" 
+            className="h-8 w-8 text-slate-300 hover:text-rose-500 hover:bg-rose-50"
+            onClick={onLogout}
+          >
+            <LogOut className="h-4 w-4" />
+          </Button>
         </div>
       </div>
     </aside>

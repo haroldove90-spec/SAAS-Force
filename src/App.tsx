@@ -20,6 +20,7 @@ import { DriverPerformancePage } from './components/DriverPerformancePage';
 import { ExpensesPage } from './components/ExpensesPage';
 import { UserManagementPage } from './components/UserManagementPage';
 import { AuditPage } from './components/AuditPage';
+import { RoleSelectionHome } from './components/RoleSelectionHome';
 import { mockDeliveries, mockPayments } from './mockData';
 
 export default function App() {
@@ -31,17 +32,28 @@ export default function App() {
     const current = localStorage.getItem('fc_active_user');
     if (current) {
       setActiveUser(JSON.parse(current));
-    } else {
-      const admin = { id: '1', name: 'Admin Principal', email: 'admin@saasforce.com', role: 'ADMIN' };
-      setActiveUser(admin);
-      localStorage.setItem('fc_active_user', JSON.stringify(admin));
     }
   }, []);
+
+  const handleSelectRole = (user: any) => {
+    setActiveUser(user);
+    localStorage.setItem('fc_active_user', JSON.stringify(user));
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('fc_active_user');
+    setActiveUser(null);
+    setActiveTab('dashboard'); // Reset tab
+  };
 
   const handleTabChange = (tab: string) => {
     setActiveTab(tab);
     setIsSidebarOpen(false); // Close sidebar on selection for mobile
   };
+
+  if (!activeUser) {
+    return <RoleSelectionHome onSelectRole={handleSelectRole} />;
+  }
 
   return (
     <div className="flex h-screen w-full bg-background overflow-hidden font-sans relative">
@@ -50,6 +62,7 @@ export default function App() {
         setActiveTab={handleTabChange} 
         isOpen={isSidebarOpen} 
         onClose={() => setIsSidebarOpen(false)} 
+        onLogout={handleLogout}
       />
       
       <main className="flex-1 flex flex-col h-full overflow-hidden">
