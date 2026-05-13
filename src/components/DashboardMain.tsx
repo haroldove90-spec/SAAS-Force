@@ -16,12 +16,6 @@ import { Button } from '@/components/ui/button';
 export function DashboardMain() {
   const [data, setData] = useState<any[]>([]);
   const [activeUser, setActiveUser] = useState<any>(null);
-  const [stats, setStats] = useState({
-    totalUSD: 0,
-    totalVES: 0,
-    completed: 0,
-    pending: 0
-  });
 
   useEffect(() => {
     const current = localStorage.getItem('fc_active_user');
@@ -29,26 +23,29 @@ export function DashboardMain() {
 
     const saved = localStorage.getItem('force_deliveries');
     if (saved) {
-      const deliveries = JSON.parse(saved);
-      setData(deliveries);
-
-      const calculated = deliveries.reduce((acc: any, d: any) => {
-        if (d.moneda === 'USD') acc.totalUSD += parseFloat(d.monto || 0);
-        if (d.moneda === 'VES') acc.totalVES += parseFloat(d.monto || 0);
-        if (d.status === 'delivered') acc.completed += 1;
-        if (d.status === 'pending') acc.pending += 1;
-        return acc;
-      }, { totalUSD: 0, totalVES: 0, completed: 0, pending: 0 });
-
-      setStats(calculated);
+      setData(JSON.parse(saved));
     }
   }, []);
 
   const isAdmin = activeUser?.role === 'ADMIN';
+  const isDriver = activeUser?.role === 'DRIVER';
   const canSeeAmounts = isAdmin || activeUser?.role === 'OPERATOR' || activeUser?.role === 'CASHIER';
 
+  // Filter deliveries for drivers if needed
+  const displayData = isDriver 
+    ? data.filter(d => d.choferId === activeUser?.id)
+    : data;
+
+  const stats = displayData.reduce((acc: any, d: any) => {
+    if (d.moneda === 'USD') acc.totalUSD += parseFloat(d.monto || 0);
+    if (d.moneda === 'VES') acc.totalVES += parseFloat(d.monto || 0);
+    if (d.status === 'delivered') acc.completed += 1;
+    if (d.status === 'pending') acc.pending += 1;
+    return acc;
+  }, { totalUSD: 0, totalVES: 0, completed: 0, pending: 0 });
+
   // Simple Chart Data Calculation
-  const paymentsByMethod = data.reduce((acc: any, d: any) => {
+  const paymentsByMethod = displayData.reduce((acc: any, d: any) => {
     const method = d.metodoPago || 'Efectivo';
     acc[method] = (acc[method] || 0) + 1;
     return acc;
@@ -147,7 +144,7 @@ export function DashboardMain() {
           </div>
 
           <div className="space-y-1">
-            {data.slice(0, 3).map((d) => (
+            {displayData.slice(0, 3).map((d) => (
               <div key={d.id} className="flex items-center justify-between p-4 rounded-2xl hover:bg-slate-50 transition-colors border border-transparent hover:border-slate-100">
                 <div className="flex items-center gap-4">
                   <div className="h-10 w-10 bg-slate-100 rounded-xl flex items-center justify-center text-slate-900 font-bold text-xs">
@@ -174,7 +171,7 @@ export function DashboardMain() {
           </div>
         </div>
       </div>
-      {data.length === 0 && (
+      {displayData.length === 0 && (
         <div className="text-center py-16">
             <p className="text-xs text-slate-400 italic">Espere a que se procesen las primeras guías...</p>
         </div>

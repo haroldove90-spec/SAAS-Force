@@ -313,15 +313,39 @@ export function DeliveryList() {
                     <Label className="text-[10px] font-bold uppercase text-slate-400 flex items-center gap-2">
                       <MapPin className="h-3 w-3" /> Dirección de Entrega
                     </Label>
-                    <Input 
-                      required
-                      readOnly={isDriver}
-                      placeholder="Calle, Edificio, Referencia"
-                      className={cn("h-12 rounded-xl focus-visible:ring-slate-900", isDriver && "bg-slate-50")}
-                      value={formData.direccion}
-                      onChange={e => setFormData({...formData, direccion: e.target.value})}
-                    />
+                    <div className="flex gap-2">
+                      <Input 
+                        required
+                        readOnly={isDriver}
+                        placeholder="Calle, Edificio, Referencia"
+                        className={cn("h-12 rounded-xl flex-1 focus-visible:ring-slate-900", isDriver && "bg-slate-50")}
+                        value={formData.direccion}
+                        onChange={e => setFormData({...formData, direccion: e.target.value})}
+                      />
+                      {isDriver && (
+                        <Button
+                          type="button"
+                          variant="outline"
+                          onClick={() => window.open(`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(formData.direccion)}`, '_blank')}
+                          className="h-12 rounded-xl border-blue-200 text-blue-600 hover:bg-blue-50"
+                        >
+                          <MapPin className="h-4 w-4" />
+                        </Button>
+                      )}
+                    </div>
                   </div>
+
+                  {isDriver && (
+                    <div className="bg-blue-50 border border-blue-100 p-4 rounded-2xl space-y-3">
+                       <h4 className="text-[10px] font-bold text-blue-700 uppercase tracking-widest flex items-center gap-2">
+                         <span className="w-1.5 h-1.5 bg-blue-500 rounded-full"></span>
+                         Reporte de Campo
+                       </h4>
+                       <p className="text-[10px] text-blue-600 leading-tight">
+                         Actualice el estado del pedido y confirme el monto recaudado al finalizar la entrega.
+                       </p>
+                    </div>
+                  )}
 
                   {!isDriver && (
                     <div className="space-y-2">

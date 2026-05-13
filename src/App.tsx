@@ -71,15 +71,21 @@ export default function App() {
             <Button 
                 variant="ghost" 
                 size="icon" 
-                className="md:hidden"
+                className="md:hidden p-0"
                 onClick={() => setIsSidebarOpen(!isSidebarOpen)}
             >
                 {isSidebarOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
             </Button>
 
-            <h2 className="text-[10px] md:text-sm font-medium text-slate-500 uppercase tracking-widest flex items-center gap-2">
+            <img 
+              src="https://cossma.com.mx/deltaforce.png" 
+              alt="FORCE CONTROL" 
+              className="h-8 md:hidden"
+            />
+
+            <h2 className="text-[10px] md:text-sm font-black text-slate-900 uppercase tracking-tight flex items-center gap-2">
               <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
-              SAAS FORCE / Venezuela
+              <span className="hidden xs:inline">FORCE CONTROL /</span> VENEZUELA
             </h2>
           </div>
           <div className="flex items-center gap-4">

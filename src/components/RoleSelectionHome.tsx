@@ -65,7 +65,7 @@ export function RoleSelectionHome({ onSelectRole }: RoleSelectionHomeProps) {
     const user = {
       id: Math.random().toString(36).substr(2, 9),
       name: `Demo ${title}`,
-      email: `${roleId.toLowerCase()}@saasforce.com`,
+      email: `${roleId.toLowerCase()}@forcecontrol.com`,
       role: roleId
     };
     onSelectRole(user);
@@ -74,8 +74,7 @@ export function RoleSelectionHome({ onSelectRole }: RoleSelectionHomeProps) {
   return (
     <div className="min-h-screen bg-[#F9FAFB] flex flex-col items-center justify-center p-6 sm:p-12 overflow-hidden relative">
       {/* Background Accents */}
-      <div className="absolute top-0 left-0 w-full h-[30vh] bg-slate-900 z-0" />
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-slate-100 rounded-full blur-[120px] opacity-20 -z-1" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-blue-100 rounded-full blur-[120px] opacity-20 -z-1" />
 
       <motion.div 
         initial={{ opacity: 0, y: 20 }}
@@ -84,18 +83,29 @@ export function RoleSelectionHome({ onSelectRole }: RoleSelectionHomeProps) {
       >
         <div className="text-center space-y-4">
           <motion.div
+            initial={{ opacity: 0, scale: 0.5 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="mb-8"
+          >
+            <img 
+              src="https://cossma.com.mx/deltaforce.png" 
+              alt="FORCE CONTROL LOGO" 
+              className="h-28 md:h-40 mx-auto"
+            />
+          </motion.div>
+          <motion.div
             initial={{ scale: 0.8 }}
             animate={{ scale: 1 }}
-            className="inline-flex items-center gap-2 px-3 py-1 bg-white/10 backdrop-blur-md rounded-full border border-white/20 text-white/80 text-[10px] font-bold uppercase tracking-widest mb-6"
+            className="inline-flex items-center gap-2 px-3 py-1 bg-blue-50 rounded-full border border-blue-100 text-blue-600 text-[10px] font-bold uppercase tracking-widest mb-2"
           >
-            <Zap className="h-3 w-3 text-yellow-400 fill-yellow-400" />
+            <Zap className="h-3 w-3" />
             Acceso Prioritario Operativo
           </motion.div>
-          <h1 className="text-4xl md:text-6xl font-black text-white tracking-tighter uppercase leading-none italic">
-            SAAS <span className="text-slate-400 not-italic">FORCE</span>
+          <h1 className="text-4xl md:text-6xl font-black text-slate-900 tracking-tighter uppercase leading-none italic">
+            FORCE <span className="text-blue-600 not-italic">CONTROL</span>
           </h1>
-          <p className="text-slate-400 text-sm md:text-lg max-w-2xl mx-auto font-medium">
-            Bienvenido a <span className="text-white font-bold">SAAS FORCE</span>. 
+          <p className="text-slate-500 text-sm md:text-lg max-w-2xl mx-auto font-medium">
+            Bienvenido a <span className="text-blue-600 font-bold">FORCE CONTROL</span>. 
             Elija el rol operativo para acceder a los módulos de gestión autorizados.
           </p>
         </div>
@@ -149,7 +159,7 @@ export function RoleSelectionHome({ onSelectRole }: RoleSelectionHomeProps) {
               <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Encriptación Forzada</span>
             </div>
           </div>
-          <p className="text-[10px] font-bold text-slate-300 uppercase tracking-widest">© 2026 SAAS FORCE INTELLIGENCE</p>
+          <p className="text-[10px] font-bold text-slate-300 uppercase tracking-widest">© 2026 FORCE CONTROL INTELLIGENCE</p>
         </div>
       </motion.div>
     </div>
