@@ -92,7 +92,7 @@ export function RoleSelectionHome({ onSelectRole }: RoleSelectionHomeProps) {
             Acceso Prioritario Operativo
           </motion.div>
           <h1 className="text-4xl md:text-6xl font-black text-white tracking-tighter uppercase leading-none italic">
-            SELECCIONE SU <span className="text-slate-400 not-italic">PERSONA</span>
+            SAAS <span className="text-slate-400 not-italic">FORCE</span>
           </h1>
           <p className="text-slate-400 text-sm md:text-lg max-w-2xl mx-auto font-medium">
             Bienvenido a <span className="text-white font-bold">SAAS FORCE</span>. 
